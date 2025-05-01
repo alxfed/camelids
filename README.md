@@ -1,10 +1,10 @@
-# Package name
-Package Name
+# camelids
+Camelids are large herbivorous mammals in the family Camelidae.
 <pre>
-  pip install independent-machine
+  pip install camelids
 </pre>
 Then:
 ```Python
   # Python
-  import independent_machine
+  import camelids
 ```
