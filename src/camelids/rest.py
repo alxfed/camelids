@@ -7,6 +7,7 @@ LICENSE file in the root directory of this source tree.
 """
 from os import environ
 import requests
+from .adapter import decode
 
 
 meta_key              = environ.get('META_API_KEY','') # meta_KEY', '')
@@ -15,21 +16,21 @@ meta_content_model    = environ.get('META_DEFAULT_CONTENT_MODEL', 'Llama-4-Maver
 meta_embedding_model  = environ.get('META_DEFAULT_EMBEDDING_MODEL', '')
 
 
-def decode_one(human_said, response, recorder=None):
-    answer = response['completion_message']['content']['text']
-    # TODO: system_instruction
-    if recorder:
-        machine_answered = dict(role='assistant',
-                                content=answer,
-                                stop_reason = response['completion_message']['stop_reason'])
-        events = [human_said, machine_answered]
-        recorder.log_it(events)
-        initial_text = human_said['content']
-        records = [dict(Human=initial_text), dict(machine=answer)]
-        recorder.record_it(records)
-    return answer
-
-
+# def decode_one(human_said, response, recorder=None):
+#     answer = response['completion_message']['content']['text']
+#     # TODO: system_instruction
+#     if recorder:
+#         machine_answered = dict(role='assistant',
+#                                 content=answer,
+#                                 stop_reason = response['completion_message']['stop_reason'])
+#         events = [human_said, machine_answered]
+#         recorder.log_it(events)
+#         initial_text = human_said['content']
+#         records = [dict(Human=initial_text), dict(machine=answer)]
+#         recorder.record_it(records)
+#     return answer
+#
+#
 def continuation(text=None, contents=None, instruction=None, recorder=None, **kwargs):
     """A continuation of text with a given context and instruction.
         kwargs:
@@ -40,9 +41,8 @@ def continuation(text=None, contents=None, instruction=None, recorder=None, **kw
             max_tokens      = number of tokens
             stop            = ['stop']  array of up to 4 sequences
     """
-    # TODO: add system_instruction only to the first request
     instruction         = kwargs.get('system_instruction', instruction)
-    system_instruction  = dict(role='system', content=instruction) if instruction else None
+    first_message       = [dict(role='system', content=instruction)] if instruction else []
 
     contents            = kwargs.get('contents', contents)
 
@@ -50,16 +50,17 @@ def continuation(text=None, contents=None, instruction=None, recorder=None, **kw
     if recorder and not contents:
         contents = recorder.log.copy()
 
-    # Create a structure that the idiots want.
     human_says = dict(role='user', content=text)
     if text and not contents:
         contents = [human_says]
     else:
         contents.append(human_says)
 
+    instruction_and_contents = first_message.extend(contents)
+
     json_data = {
         'model':                    kwargs.get('model', meta_content_model),
-        'messages':                 contents,
+        'messages':                 instruction_and_contents,
         'response_format':          kwargs.get('response_format',{'type': 'text'}),
         'temperature':              kwargs.get('temperature', 0.5),  # 0.0 to 1.0
         'max_completion_tokens':    kwargs.get('max_tokens', 4028),
@@ -79,7 +80,7 @@ def continuation(text=None, contents=None, instruction=None, recorder=None, **kw
         )
         if response.status_code == requests.codes.ok:
             output = response.json()
-            answer = decode_one(human_says, output, recorder)
+            answer = decode(human_says, output, recorder)
         else:
             print(f'Request status code: {response.status_code}')
             return None

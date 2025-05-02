@@ -8,3 +8,6 @@ Then:
   # Python
   import camelids
 ```
+## Without (!!!) unnecessary dependencies,
+- no 'typed dictionaries';
+- no 'Pydantic'.
