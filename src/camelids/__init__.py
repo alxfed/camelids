@@ -12,4 +12,5 @@ from .adapter import *
 __all__ = [
     'continuation',
     'decode',
+    'encode'
 ]

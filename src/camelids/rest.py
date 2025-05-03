@@ -7,7 +7,7 @@ LICENSE file in the root directory of this source tree.
 """
 from os import environ
 import requests
-from .adapter import decode
+from camelids.adapter import decode
 
 
 meta_key              = environ.get('META_API_KEY','') # meta_KEY', '')
@@ -121,7 +121,12 @@ if __name__ == '__main__':
     '''
     ['Llama-4-Scout-17B-16E-Instruct-FP8', 'Llama-4-Maverick-17B-128E-Instruct-FP8', 'Llama-3.3-70B-Instruct', 'Llama-3.3-8B-Instruct']
     '''
-    import yaml
+    # from grammateus import Grammateus
+
+    location = '/home/alxfed/Documents/Fairytales/two/'
+
+    # recorder = Grammateus(location)
+
     from yaml import safe_load as yl
 
     kwargs = """  # this is a string in YAML format
@@ -136,9 +141,9 @@ if __name__ == '__main__':
     """
     this = yl(kwargs)
 
-    instruction = 'You are a eloquent assistant.'
+    instruction = 'I am Joseph Jacobs, I retell folk tales.'
 
-    text_to_continue = 'What is the capital of Indonesia?'
+    text_to_continue = 'And what happened next?'
 
     machine_responses = continuation(
         text=text_to_continue,
