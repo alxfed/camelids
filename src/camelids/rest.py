@@ -7,7 +7,7 @@ LICENSE file in the root directory of this source tree.
 """
 from os import environ
 import requests
-from camelids.adapter import decode
+from .adapter import decode
 
 
 meta_key              = environ.get('META_API_KEY','') # meta_KEY', '')
@@ -44,19 +44,23 @@ def continuation(text=None, contents=None, instruction=None, recorder=None, **kw
     instruction         = kwargs.get('system_instruction', instruction)
     first_message       = [dict(role='system', content=instruction)] if instruction else []
 
+    # contents can come in kwards or as an argument
     contents            = kwargs.get('contents', contents)
 
-    # if there is a recorded previous conversation
+    # if there is a recorded log of the previous conversation
     if recorder and not contents:
         contents = recorder.log.copy()
 
+    # now add the incoming human text
     human_says = dict(role='user', content=text)
     if text and not contents:
         contents = [human_says]
     else:
         contents.append(human_says)
 
-    instruction_and_contents = first_message.extend(contents)
+    # add contents and user text to the first (instruction) message
+    first_message.extend(contents)
+    instruction_and_contents = first_message
 
     json_data = {
         'model':                    kwargs.get('model', meta_content_model),
