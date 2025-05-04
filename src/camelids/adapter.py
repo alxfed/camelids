@@ -40,8 +40,8 @@ def encode(records, recorder=None):
                 print('unknown record type')
             machine_said = dict(role='assistant', content=utterance, stop_reason='stop')
             log.append(machine_said)
-        elif key == 'Deus':
-            deus_said = dict(role='system', content=record['Deus'])  # θεός
+        elif key == 'instruction':
+            deus_said = dict(role='system', content=record['instruction'])  # θεός
             log.append(deus_said)
         else:
             print('unknown record type')
