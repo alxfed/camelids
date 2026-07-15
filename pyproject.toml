@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 name = "camelids"
 version = "0.0.8"
 authors = [
+    {name="Machina-Ratiocinatrix", email="machina.ratio@gmail.com"},
     {name="Alexander Fedotov", email="alex.fedotov@aol.com"},
 ]
 description = "API calls to 'llama' models without dependencies."
