@@ -42,12 +42,9 @@ def chat_complete(messages=None, instructions=None, tools=None, **kwargs):
         # 'response_format':          kwargs.get('response_format',{'type': 'text'}),
         'temperature': kwargs.get('temperature', 1),  # 0.0 to 2.0
         'max_tokens': kwargs.get('max_tokens', 4096),
-        'prompt_truncate_len': kwargs.get('prompt_truncate_len', 100000),
         'n': kwargs.get('n', 1),
         'top_p': kwargs.get('top_p', 0.9),
-        'top_k': kwargs.get('top_k', 10),
-        'reasoning_effort': kwargs.get('reasoning_effort', 'low'),  # 'low', 'medium', 'high'
-        'reasoning_history': kwargs.get('reasoning_history', None),  # 'disabled', 'interleaved', 'preserved'
+        'reasoning_effort': kwargs.get('reasoning_effort', 'high'),  # 'low', 'medium', 'high'
         'stream': False
     }
     if tools:
