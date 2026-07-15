@@ -11,15 +11,16 @@ import urllib.error
 from os import environ
 
 
-# Respond
-api_key                 = environ.get('FIREWORKS_API_KEY')
-api_base                = environ.get('FIREWORKS_BASE_URL', 'https://api.fireworks.ai/inference/v1')
-default_model = environ.get('FIREWORKS_MODEL','accounts/fireworks/models/gpt-oss-120b')
+api_key = environ.get("METAI_API_KEY", '')
+default_model = environ.get("METAI_DEFAULT_MODEL", 'muse-spark-1.1')
+api_base = environ.get("METAI_API_BASE", "https://api.meta.ai/v1")
 
+
+# Set the mandatory headers
 headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer " + api_key,
-    "User-Agent": "illuminations"
+    "Authorization": f"Bearer {api_key}",
+    "User-Agent": "camelids"
 }
 
 
