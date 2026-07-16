@@ -40,9 +40,8 @@ def get_function(func_name):
     return func
 
 
-def get_func_args(func_def):
+def get_func_args(func_args_str):
     try:
-        func_args_str = func_def.get('arguments')
         if isinstance(func_args_str, str):
             func_args = json.loads(func_args_str)
         else:
@@ -100,3 +99,33 @@ def query(payload, url_suffix):
         # Handle network/connection errors
         print(f"Failed to reach the server: {e.reason}")
         return {}
+
+
+def decode_output(output):
+    # Parse the result
+    text = ''; thoughts = ''
+    for part in output:
+        part_type = part.get('type', None)
+        if part_type == 'message':
+            text = " ".join([chunk['text'] for chunk in part['content'] if chunk['type'] == 'output_text'])
+        elif part_type == 'reasoning':
+            thoughts = " ".join([chunk['text'] for chunk in part['summary'] if chunk['type'] == 'summary_text'])
+    function_calls = [part for part in output if part['type'] == 'function_call']
+    return thoughts, text, function_calls
+
+
+def decode(output):
+    text = ''
+    thoughts = ''
+    for chunk in output:
+        chunk_type = chunk.get('type', '')
+        if chunk_type == 'text':
+            addition = chunk.get('text', '')
+            if addition not in ('\n\n', '\n'):
+                text += addition
+
+        elif chunk_type == 'thinking':
+            thoughts += chunk.get('thinking', '')
+    function_calls = [part for part in output if part['type'] == 'tool_use']
+
+    return thoughts, text, function_calls
