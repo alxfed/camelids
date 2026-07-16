@@ -31,7 +31,6 @@ def message(messages=None, instructions=None, tools=None, **kwargs):
         'thinking':                 kwargs.get('thinking', {'type': 'enabled'}),
         'max_tokens':               kwargs.get('max_tokens', 4096),
         'top_p':                    kwargs.get('top_p', 0.9),
-        'top_k':                    kwargs.get('top_k', 10),
         'stream':                   False
     }
     if tools:
