@@ -18,14 +18,7 @@ def get_weather(location):
 
 
 def chat_complete(messages=None, instructions=None, tools=None, **kwargs):
-    """A continuation of text with a given context and instruction.
-        kwargs:
-            temperature     = 0 to 1.0
-            top_p           = 0.0 to 1.0
-            top_k           = The maximum number of tokens to consider when sampling.
-            n               = 1 is mandatory for this method continuationS have n > 1
-            max_tokens      = number of tokens
-            stop            = ['stop']  array of up to 4 sequences
+    """
     """
     instruction         = kwargs.get('system_instruction', instructions)
     first_message       = [dict(role='system', content=instruction)] if instruction else []
@@ -66,7 +59,7 @@ def chat_complete(messages=None, instructions=None, tools=None, **kwargs):
                 call_id = function_call.get('id')
                 func_def = function_call.get('function')
                 func_name = func_def.get('name', '')
-                func_args_str = func_def.get('arguments')
+                func_args_str = func_def.get('arguments', {})
 
                 # Look up tool by name in globals and caller frames
                 func = get_function(func_name)
