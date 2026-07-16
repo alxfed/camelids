@@ -140,7 +140,7 @@ def respond(messages=None, instructions=None, tools=None, **kwargs):
             function_outputs_messages = []
             for function_call in function_calls:
                 call_id = function_call.get('call_id')
-                func_name = function_call.get('name')
+                func_name = function_call.get('name', '')
                 func_args_str = function_call.get('arguments', '{}')
                 # Look up tool by name in globals and caller frames
                 func = get_function(func_name)

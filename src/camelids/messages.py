@@ -28,22 +28,15 @@ def message(messages=None, instructions=None, tools=None, **kwargs):
         'system':                   kwargs.get('system', instructions),
         'messages':                 kwargs.get('messages', messages),
         'output_config':            kwargs.get('output_config',{'effort': 'high'}),
-        'thinking':                 kwargs.get('thinking', {
-                                                            'type': 'enabled',
-                                                            'budget_tokens': 10000,
-                                                            }),
-        'tool_choice':              kwargs.get('tool_choice', {'type': 'auto', 'disable_parallel_tool_use': False}),
+        'thinking':                 kwargs.get('thinking', {'type': 'enabled'}),
         'max_tokens':               kwargs.get('max_tokens', 4096),
-        'prompt_truncate_len':      kwargs.get('prompt_truncate_len', 100000),
-        'n':                        kwargs.get('n', 1),
         'top_p':                    kwargs.get('top_p', 0.9),
         'top_k':                    kwargs.get('top_k', 10),
         'stream':                   False
     }
     if tools:
         payload['tools'] = tools
-        payload['parallel_tool_calls'] = True
-        payload['tool_choice'] = 'auto'
+        payload['tool_choice'] = kwargs.get('tool_choice', {})
 
     while True:
         result = query(payload, '/messages')
