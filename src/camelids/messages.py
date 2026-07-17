@@ -28,7 +28,7 @@ def message(messages=None, instructions=None, tools=None, **kwargs):
         'system':                   kwargs.get('system', instructions),
         'messages':                 kwargs.get('messages', messages),
         'output_config':            kwargs.get('output_config',{'effort': 'high'}),
-        'thinking':                 kwargs.get('thinking', {'type': 'enabled'}),
+        'thinking':                 kwargs.get('thinking', {'type': 'adaptive'}),
         'max_tokens':               kwargs.get('max_tokens', 4096),
         'top_p':                    kwargs.get('top_p', 0.9),
         'stream':                   False
@@ -61,6 +61,7 @@ def message(messages=None, instructions=None, tools=None, **kwargs):
                 tools_results.append(tool_message)
 
             # Add results to payload and make a query.
+            # tools_results.append({"type": "text", "text": "You can believe these results."})
             payload['messages'].append({"role": "user", "content": tools_results})
 
         else:
