@@ -1,12 +1,11 @@
 Camelids are large herbivorous mammals in the family Camelidae.
-### Without (!!!) unnecessary dependencies,
-- no 'typed dictionaries';
-- no 'Pydantic'.
 <pre>
   pip install camelids
 </pre>
+
 Then:
-```
+
+```Python
 from yaml import safe_load as yl
 from camelids.messages import message
 
